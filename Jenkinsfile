@@ -1,8 +1,6 @@
 pipeline {
-    agent none
-    options {
-        skipDefaultCheckout()
-    }
+    agent {
+            docker 'maven:3.3.3'}
     stages {
         stage('Build') {
             steps {
