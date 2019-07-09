@@ -1,25 +1,17 @@
+@Library(['piper-lib', 'piper-lib-os']) _
+
 pipeline {
     agent {
             docker 'maven:3.6.1'}
     stages {
+        stage('Init') {
+            steps {
+                library 'piper-lib-os'
+                sapPiperStageInit script: this, customDefaults: params.customDefaults
+            }
         stage('Build') {
             steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
+               sapPiperStageCentralBuild script: this
             }
         }
     }
